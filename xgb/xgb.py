@@ -26,10 +26,10 @@ warnings.filterwarnings('ignore')
 # In[2]:
 
 
-train_tr = pd.read_csv('../input/ieee-fraud-detection/train_transaction.csv')
-train_id = pd.read_csv('../input/ieee-fraud-detection/train_identity.csv')
-test_tr = pd.read_csv('../input/ieee-fraud-detection/test_transaction.csv')
-test_id = pd.read_csv('../input/ieee-fraud-detection/test_identity.csv')
+train_tr = pd.read_csv('../data/train_transaction.csv')
+train_id = pd.read_csv('../data/train_identity.csv')
+test_tr = pd.read_csv('../data/test_transaction.csv')
+test_id = pd.read_csv('../data/test_identity.csv')
 
 
 # In[3]:
@@ -561,7 +561,7 @@ preds_lgb = model.predict(test_X)
 # In[61]:
 
 
-submission = pd.read_csv('../input/ieee-fraud-detection/sample_submission.csv')
+submission = pd.read_csv('../data/sample_submission.csv')
 submission['isFraud'] = np.nan
 submission.head()
 
