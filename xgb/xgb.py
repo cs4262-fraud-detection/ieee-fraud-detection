@@ -13,9 +13,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 plt.style.use('fivethirtyeight')
-
-import warnings
-warnings.filterwarnings('ignore')
+from sklearn.model_selection import train_test_split
+import datetime
+import xgboost as xgb
+import lightgbm as lgbm
 
 
 # ## 1. Loading the Dataset
@@ -84,8 +85,7 @@ print(train_id.info())
 # In[7]:
 
 
-import gc
-gc.collect()
+#import gc
 test_tr = reduce_mem(test_tr)
 test_id = reduce_mem(test_id)
 
@@ -114,7 +114,7 @@ dataset = pd.concat([train, test], axis=0, sort=False).reset_index(drop=True)
 
 train_len = len(train)
 del train_tr, train_id, test_tr, test_id
-gc.collect()
+#gc.collect()
 
 
 # ## 2. Exploratory Data Analysis
@@ -182,7 +182,7 @@ print(dataset.shape)
 # In[17]:
 
 
-import datetime
+
 
 genesis = datetime.datetime.strptime('2019-01-01', '%Y-%m-%d')
 dataset['Date'] = dataset['TransactionDT'].apply(lambda x : genesis+datetime.timedelta(seconds=x))
@@ -482,7 +482,7 @@ np.unique(y)
 # In[56]:
 
 
-from sklearn.model_selection import train_test_split
+
 
 train_X, val_X, train_y, val_y = train_test_split(X, y, test_size=0.2, random_state=0)
 
@@ -492,7 +492,7 @@ train_X, val_X, train_y, val_y = train_test_split(X, y, test_size=0.2, random_st
 # In[57]:
 
 
-import xgboost as xgb
+
 
 hyper = {
     'booster' : 'gbtree',
@@ -528,7 +528,7 @@ preds_xgb = _xgb.predict(dtst)
 # In[59]:
 
 
-import lightgbm as lgbm
+
 
 hyper = {
     'num_leaves' : 500,
