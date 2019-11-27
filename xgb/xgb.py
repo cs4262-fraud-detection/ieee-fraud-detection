@@ -213,7 +213,8 @@ g = sns.barplot(dataset[dataset.index<train_len].Hours, train.isFraud, ax=ax[2])
 ax[2].set_title('Fraud Charges by Hours')
 plt.setp(g.get_xticklabels(), visible=False)
 
-plt.show()
+#plt.show()
+plt.savefig('xgb_plots/plot1.png')
 
 
 # In[20]:
@@ -243,7 +244,8 @@ dataset.loc[(dataset.P_emaildomain!='gmail.com')&(dataset.P_emaildomain!='yahoo.
 sns.countplot(dataset['P_emaildomain'])
 fig = plt.gcf()
 fig.set_size_inches(10, 4)
-plt.show()
+#plt.show()
+plt.savefig('xgb_plots/plot2.png')
 
 
 # In[24]:
@@ -265,7 +267,8 @@ dataset.loc[(dataset.R_emaildomain!='gmail.com')&(dataset.R_emaildomain!='hotmai
 sns.countplot(dataset['R_emaildomain'])
 fig = plt.gcf()
 fig.set_size_inches(10, 4)
-plt.show()
+#plt.show()
+plt.savefig('xgb_plots/plot3.png')
 
 
 # ### 3-3. Operating Systems
