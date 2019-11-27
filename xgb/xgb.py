@@ -447,7 +447,7 @@ dataset.shape
 
 dataset.drop('TransactionID', axis=1, inplace=True)
 del dataset_num, dataset_cat
-gc.collect()
+#gc.collect()
 
 
 # ## 4. Predictive Modeling
