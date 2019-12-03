@@ -151,7 +151,7 @@ dataset[dataset_columns] = preprocessing.StandardScaler().fit_transform(dataset[
 X_pre_pca = dataset[dataset_columns]
 
 
-# In[15]:
+# In[ ]:
 
 
 # Reduce number of dimensions through PCA
@@ -159,17 +159,32 @@ reduced_number_of_dimensions = 15 # Note: This number should be increased before
 # submission. Lower values lead to faster model training but lower model accuracy/f1-scores.
 pca = decomposition.PCA(n_components=reduced_number_of_dimensions, random_state=42)
 X_post_pca = pca.fit_transform(X_pre_pca) 
-print(pca.explained_variance_ratio_.sum())
+# print(pca.explained_variance_ratio_.sum())
+
+explained_variances = []
+for k in np.arange(20, 401, 20):
+    pca = decomposition.PCA(n_components=k)
+    pca.fit_transform(X_pre_pca)
+    evr = pca.explained_variance_ratio_.sum()
+    print("k={}\t{}".format(k,evr))
+    explained_variances.append(pca.explained_variance_ratio_.sum())
+    
+plt.plot(k, explained_variances)
+plt.xlabel("Number of Principal Components")
+plt.ylabel("Explained Variance")
+#plt.show()
+plt.savefig("Explained_variance.png")
 
 
-# In[16]:
+# In[15]:
+
 
 
 # Perform 80/20 train/test split
 X_train, X_test, y_train, y_test = model_selection.train_test_split(X_post_pca, y, test_size=0.2, random_state=1)
 
 
-# In[17]:
+# In[16]:
 
 
 # The following function returns a model with the hyperparameters that yield the best f1 score
@@ -178,8 +193,11 @@ def get_model_with_best_estimators(model, parameters, X_train, y_train):
     grid_search.fit(X_train, y_train)
     return grid_search.best_estimator_
 
+# TODO: Display f1 scores on the training data as well? I think we can get them directly from the grid_search 
+# parameter on the function above by calling grid_search.best_score_
 
-# In[18]:
+
+# In[17]:
 
 
 random_forest_parameters = {'n_estimators':[50, 100, 200], 'criterion':('gini', 'entropy')}
@@ -187,7 +205,7 @@ random_forest = ensemble.RandomForestClassifier(n_jobs=-1)
 best_random_forest_model = get_model_with_best_estimators(random_forest, random_forest_parameters, X_train, y_train)
 
 
-# In[ ]:
+# In[19]:
 
 
 logistic_regression_parameters = {'C':[1, 10], 'penalty':('l2',), 'solver':('saga', 'newton-cg')}
@@ -195,7 +213,7 @@ logistic_regression = linear_model.LogisticRegression(n_jobs=-1, max_iter=200)
 best_logistic_regression_model = get_model_with_best_estimators(logistic_regression, logistic_regression_parameters, X_train, y_train)
 
 
-# In[ ]:
+# In[22]:
 
 
 svm_parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
@@ -203,25 +221,25 @@ svm = svm.SVC(max_iter=200)
 best_svm_model = get_model_with_best_estimators(svm, svm_parameters, X_train, y_train)
 
 
-# In[ ]:
+# In[20]:
 
 
 print(sklearn.metrics.classification_report(y_test, best_random_forest_model.predict(X_test)))
 
 
-# In[ ]:
+# In[21]:
 
 
 print(sklearn.metrics.classification_report(y_test, best_logistic_regression_model.predict(X_test)))
 
 
-# In[ ]:
+# In[23]:
 
 
 print(sklearn.metrics.classification_report(y_test, best_svm_model.predict(X_test)))
 
 
-# In[20]:
+# In[24]:
 
 
 def split_with_PCA(k, x_tr, y):
@@ -229,12 +247,12 @@ def split_with_PCA(k, x_tr, y):
     return model_selection.train_test_split(X_pca, y, test_size=.2, random_state=1)
 
 
-# In[21]:
+# In[25]:
 
 
 # Neural network approach
 
-K = [50, 100, 150, 200, 250, 300, 350, 400]
+K = [50, 100, 150, 200]
 nns = [Sequential() for _ in range(len(K))]
 results = []
 batch_size = 5000
